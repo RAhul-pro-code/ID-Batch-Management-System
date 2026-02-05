@@ -26,7 +26,14 @@ async function loadBatches(){
   const tbody = $('#batches-table tbody'); tbody.innerHTML='';
   data.forEach(b=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${b.id}</td><td>${b.batchName}</td><td>${b.technology}</td><td>${b.capacity}</td><td>${b.enrolledCount||0}</td><td class="actions"><button data-id='${b.id}' class='edit-batch'>Edit</button> <button data-id='${b.id}' class='del-batch danger'>Delete</button></td>`;
+    tr.innerHTML = `<td>${b.id}</td>
+            <td>${b.batchName}</td>
+            <td>${b.technology}</td>
+            <td>${b.startDate || ''}</td>
+            <td>${b.endDate || ''}</td>
+            <td>${b.capacity ?? ''}</td>
+            <td>${b.enrolledCount||0}</td>
+            <td class="actions"><button data-id='${b.id}' class='edit-batch'>Edit</button> <button data-id='${b.id}' class='del-batch danger'>Delete</button></td>`;
     tbody.appendChild(tr);
   });
   document.querySelectorAll('.del-batch').forEach(btn=>btn.addEventListener('click', async (e)=>{
