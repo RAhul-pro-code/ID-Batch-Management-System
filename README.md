@@ -95,133 +95,138 @@ Notes:
 
 ## API Endpoints (for automated calls or Postman)
 
-Base URL: `http://localhost:9090`
+# IDMS — Intern & Batch Data Management System
 
-Batches:
-- `POST /api/batches` — create batch
-- `GET /api/batches` — list batches
-- `GET /api/batches/{id}` — get one batch
-- `PUT /api/batches/{id}` — update batch
-- `DELETE /api/batches/{id}` — delete batch
+This repository contains a Spring Boot backend and a modern React (Vite) frontend to manage internship batches and interns.
+The project supports running with an embedded H2 database for quick testing, or with MySQL for persistent storage. The Maven build is configured to optionally build the React frontend and package it inside the Spring Boot app.
 
-Interns:
-- `POST /api/interns` — create intern
-- `GET /api/interns` — list interns
-- `GET /api/interns/{id}` — get one intern
-- `PUT /api/interns/{id}` — update intern
-- `DELETE /api/interns/{id}` — delete intern
-- `PUT /api/interns/{id}/performance?performanceScore=X` — update performance score
+Contents & quick links
+- Backend: Spring Boot (Java 17) — source in `src/main/java`
+- REST API controllers, services, repositories under `com.example.demo`
+- React frontend (Vite) scaffold under `frontend/` (build output is written into Spring Boot static resources)
+- Docker Compose file `docker-compose.yml` to start a local MySQL for development
+- Configuration: `src/main/resources/application.properties`
 
-Health:
-- `GET /health` — simple health check (returns status `UP` if running)
+Quick status
+- Static JS UI (legacy) kept under `src/main/resources/static/app` for reference.
+- React frontend scaffold added under `frontend/` (recommended UI).
+- MySQL connector added to `pom.xml` and `application.properties` updated to support MySQL via environment variables.
 
-H2 console:
-- `http://localhost:9090/h2-console` (JDBC URL: `jdbc:h2:mem:testdb`, user `sa`, no password)
+Prerequisites
+- Java 17+
+- Maven (wrapper `./mvnw.cmd` included)
+- Node.js (for local frontend dev/build) — recommended v18+
+- Docker (optional, to run MySQL via `docker-compose`)
 
----
+Run options (recommended for full-stack local dev)
 
-## Example cURL requests (copy and run in terminal)
+1) Start MySQL (optional) — either use your existing MySQL or Docker Compose included here.
 
-Create a batch:
+Using Docker Compose (recommended if you don't have a local MySQL configured):
 
-```bash
-curl -X POST http://localhost:9090/api/batches \
-  -H "Content-Type: application/json" \
-  -d '{
-    "batchName": "Java Batch 2024",
-    "startDate": "2024-02-01",
-    "endDate": "2024-04-30",
-    "technology": "Java Spring Boot",
-    "capacity": 30,
-    "description": "Learn Java with Spring Boot"
-  }'
+```powershell
+cd C:\Users\rahul\Desktop\InternBatchSystem\demo
+docker compose up -d
 ```
 
-Create an intern (replace `batch.id` with a real batch id):
+The compose file creates a MySQL 8 container. Defaults in the compose file:
+- MYSQL_ROOT_PASSWORD: `change_me`
+- MYSQL_DATABASE: `idms_db`
+- MYSQL_USER: `idms_user`
+- MYSQL_PASSWORD: `idms_pass`
 
-```bash
-curl -X POST http://localhost:9090/api/interns \
-  -H "Content-Type: application/json" \
-  -d '{
-    "firstName": "Rahul",
-    "lastName": "Kumar",
-    "email": "rahul.kumar@example.com",
-    "phoneNumber": "9876543210",
-    "college": "Delhi University",
-    "degree": "B.Tech",
-    "specialization": "Computer Science",
-    "dateOfBirth": "2002-05-15",
-    "address": "123 Main Street",
-    "enrollmentDate": "2024-02-01",
-    "batch": { "id": 1 }
-  }'
+If you already have MySQL (you said you do) you can skip Docker. By default this project is configured with environment-driven credentials. The app defaults were set to:
+
+- JDBC URL: `jdbc:mysql://localhost:3306/idms_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC`
+- Username: `root`
+- Password: `Rahulbh@3123`
+
+You can override these by setting environment variables before startup:
+
+- `JDBC_DATABASE_URL`
+- `JDBC_DATABASE_USERNAME`
+- `JDBC_DATABASE_PASSWORD`
+
+For example (PowerShell):
+
+```powershell
+$env:JDBC_DATABASE_USERNAME='root'
+$env:JDBC_DATABASE_PASSWORD='Rahulbh@3123'
+# optional: $env:JDBC_DATABASE_URL='jdbc:mysql://host:3306/idms_db?createDatabaseIfNotExist=true'
 ```
 
-Get all batches:
+2) Build frontend (if you want the React app inside Spring Boot static folder)
 
-```bash
-curl http://localhost:9090/api/batches
+You can build the React app manually or let Maven do it automatically during `mvn package`.
+
+Manual build (recommended if developing frontend):
+
+```powershell
+cd frontend
+npm install
+npm run build
+
+# The Vite build is configured to output into src/main/resources/static
 ```
 
----
+Automatic build via Maven (already configured):
 
-## H2 Database console
+When you run `mvn package`, the `frontend-maven-plugin` will install Node/npm (if necessary) and run `npm install` and `npm run build` in `frontend/`. The built static files are placed under `src/main/resources/static` so Spring Boot serves them.
 
-1. Open `http://localhost:9090/h2-console` in your browser.
-2. Use JDBC URL `jdbc:h2:mem:testdb`, user `sa`, password blank, then click Connect.
-3. You can run SQL queries such as `SELECT * FROM batches;` or `SELECT * FROM interns;`.
+3) Build and run the Spring Boot backend
 
-Note: The H2 database is in-memory. When you stop the app the data is lost. For persistent storage use a file-based or external database such as PostgreSQL.
-
----
-
-## Common problems and fixes
-
-- "Connection refused" when opening `http://localhost:9090`:
-  - Check the app is running in the terminal where you started it.
-  - Make sure no other process is using port 9090. To change the port edit `src/main/resources/application.properties` (`server.port`) or set `--server.port=XXXX` when starting.
-
-- `400 Bad Request` when creating batches or interns:
-  - Make sure `Content-Type: application/json` header is present.
-  - Check required fields are present and the JSON is valid (dates use `YYYY-MM-DD`, `capacity` is a number).
-
-- Port already in use:
-  - Stop the other app using that port or change this app's port in `application.properties`.
-
----
-
-## How to push this project to GitHub (if you want to keep a copy online)
-
-1. Create a new repository on GitHub (for example `ID-Batch-Management-System`).
-2. From project root run:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/<your-username>/ID-Batch-Management-System.git
-git push -u origin main
+```powershell
+cd C:\Users\rahul\Desktop\InternBatchSystem\demo
+.\mvnw.cmd -DskipTests clean package
+java -jar target\demo-0.0.1-SNAPSHOT.jar
 ```
 
-Replace `<your-username>` with your GitHub username.
+Or run in dev mode:
 
-Note: This project has already been pushed to `https://github.com/RAhul-pro-code/ID-Batch-Management-System`.
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+Open the UI in your browser:
+
+- React build served by Spring Boot: `http://localhost:9090/` (index from frontend build)
+- Legacy static UI: `http://localhost:9090/app/index.html` (kept for quick testing)
+
+API and usage
+
+All endpoints are served under `/api`.
+
+Batches: `POST /api/batches`, `GET /api/batches`, `GET /api/batches/{id}`, `PUT /api/batches/{id}`, `DELETE /api/batches/{id}`
+
+Interns: `POST /api/interns`, `GET /api/interns`, `GET /api/interns/{id}`, `PUT /api/interns/{id}`, `DELETE /api/interns/{id}`
+
+Example cURL requests and Postman collections are available in the repository (you can import or use the UI directly).
+
+Security & configuration notes
+- The repository currently contains example defaults for local development; do not store production credentials in plaintext. Prefer environment variables or a secrets manager for production.
+- The app reads DB configuration from environment variables (`JDBC_DATABASE_*`). Update your CI/CD or local environment accordingly.
+
+Development notes
+- React dev server: from `frontend/` run `npm run dev` for fast iteration (it runs on Vite's dev server). If you run the React dev server, it serves on a different port — either proxy API calls or use the packaged static build for a single origin.
+- Maven frontend plugin: building with Maven will automatically run the frontend build during `generate-resources` phase (see `pom.xml`).
+
+Files of interest
+- `frontend/` — React source and build config (Vite)
+- `src/main/resources/static/app` — legacy static UI (HTML/CSS/JS)
+- `src/main/resources/application.properties` — environment-driven DB config
+- `docker-compose.yml` — optional MySQL for local development
+
+Troubleshooting
+- If Spring Boot fails to start, check logs for DB connection errors and verify MySQL is reachable with the credentials you provided.
+- If port 9090 is in use, change `server.port` in `application.properties` or stop the other process.
+
+Contributing / next steps
+- I can: wire Docker Compose to also bring up the app service, add migrations (Flyway/Liquibase), or improve the React UI (modals, validation, icons). Tell me which one you'd like next.
+
+Repository pushed
+
+All changes (React scaffold, frontend integration, MySQL support, Docker Compose) are committed and pushed to the repository `origin/main`.
 
 ---
 
-## Next ideas (optional improvements)
-
-- Replace the static UI with a React or Angular frontend for a better user experience.
-- Add server-side validation and DTOs to prevent invalid data.
-- Switch to PostgreSQL or MySQL for persistent data storage.
-- Add authentication (Spring Security) to protect the API.
-
----
-
-## Need help?
-
-If anything is unclear or you want me to implement an improvement (for example, add a dropdown that lists batches in the intern form or scaffold a React app), tell me which feature and I'll implement it.
-
-Happy coding! 👩‍💻👨‍💻
-# ID-Batch-Management-System
+If you want, I can now start your local MySQL connection and run the app here to verify everything end-to-end — say "run now" and I'll start the app and run a quick create→list flow.
