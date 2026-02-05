@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IDMS - Demo UI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>IDMS — Intern & Batch Management (Demo)</h1>
+    <nav>
+      <button id="tab-batches" class="active">Batches</button>
+      <button id="tab-interns">Interns</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="batches-section">
+      <h2>Batches</h2>
+      <form id="batch-form">
+        <input name="id" type="hidden">
+        <label>Batch Name <input name="batchName" required></label>
+        <label>Start Date <input name="startDate" type="date" required></label>
+        <label>End Date <input name="endDate" type="date" required></label>
+        <label>Technology <input name="technology" required></label>
+        <label>Capacity <input name="capacity" type="number" required></label>
+        <label>Description <input name="description"></label>
+        <button type="submit">Save</button>
+        <button type="button" id="batch-reset">Reset</button>
+      </form>
+
+      <h3>All Batches</h3>
+      <table id="batches-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Tech</th><th>Dates</th><th>Capacity</th><th>Enrolled</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="interns-section" style="display:none">
+      <h2>Interns</h2>
+      <form id="intern-form">
+        <input name="id" type="hidden">
+        <label>First Name <input name="firstName" required></label>
+        <label>Last Name <input name="lastName" required></label>
+        <label>Email <input name="email" type="email" required></label>
+        <label>Phone <input name="phoneNumber" required></label>
+        <label>College <input name="college" required></label>
+        <label>Degree <input name="degree" required></label>
+        <label>Specialization <input name="specialization" required></label>
+        <label>Date of Birth <input name="dateOfBirth" type="date" required></label>
+        <label>Address <input name="address" required></label>
+        <label>Enrollment Date <input name="enrollmentDate" type="date" required></label>
+        <label>Batch ID <input name="batchId" type="number" required></label>
+        <button type="submit">Save</button>
+        <button type="button" id="intern-reset">Reset</button>
+      </form>
+
+      <h3>All Interns</h3>
+      <table id="interns-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Batch</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+*{box-sizing:border-box;font-family:Arial, sans-serif}
+body{margin:0;padding:0;background:#f5f7fb;color:#333}
+header{background:#2b6cb0;color:white;padding:16px}
+header h1{margin:0;font-size:20px}
+nav{margin-top:8px}
+nav button{margin-right:8px;padding:6px 10px;border:none;background:#fff;color:#2b6cb0;border-radius:4px;cursor:pointer}
+nav button.active{background:#f6fbff}
+main{padding:16px}
+form label{display:block;margin:6px 0}
+input{padding:6px;width:100%;max-width:360px}
+button{padding:8px 12px;margin-top:8px}
+table{width:100%;border-collapse:collapse;margin-top:12px;background:#fff}
+th,td{border:1px solid #ddd;padding:8px;text-align:left}
+th{background:#eef4ff}
+section{margin-bottom:24px}
