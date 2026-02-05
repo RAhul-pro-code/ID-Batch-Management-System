@@ -12,11 +12,10 @@ import java.util.Optional;
 @Repository
 public interface InternRepository extends JpaRepository<Intern, Long> {
     Optional<Intern> findByEmail(String email);
-    List<Intern> findByBatchId(Long batchId);
+    List<Intern> findByBatch_Id(Long batchId);
     List<Intern> findByStatus(String status);
     List<Intern> findByCollege(String college);
     List<Intern> findBySpecialization(String specialization);
     
-    @Query("SELECT i FROM Intern i WHERE i.batch.id = :batchId AND i.status = :status")
-    List<Intern> findByBatchIdAndStatus(@Param("batchId") Long batchId, @Param("status") String status);
+    List<Intern> findByBatch_IdAndStatus(Long batchId, String status);
 }

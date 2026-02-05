@@ -21,8 +21,18 @@ public class InternService {
 
     public Intern createIntern(Intern intern) {
         intern.setStatus("ENROLLED");
+        // If client provided only batchId (transient), resolve and set Batch entity
+        if (intern.getBatch() == null && intern.getBatchId() != null) {
+            batchService.getBatchById(intern.getBatchId()).ifPresent(intern::setBatch);
+        }
+        if (intern.getBatch() == null || intern.getBatch().getId() == null) {
+            throw new IllegalArgumentException("batchId is required and must refer to an existing batch");
+        }
+
         Intern savedIntern = internRepository.save(intern);
-        batchService.incrementEnrolledCount(intern.getBatch().getId());
+        if (savedIntern.getBatch() != null && savedIntern.getBatch().getId() != null) {
+            batchService.incrementEnrolledCount(savedIntern.getBatch().getId());
+        }
         return savedIntern;
     }
 
@@ -65,7 +75,7 @@ public class InternService {
     }
 
     public List<Intern> getInternsByBatchId(Long batchId) {
-        return internRepository.findByBatchId(batchId);
+        return internRepository.findByBatch_Id(batchId);
     }
 
     public List<Intern> getInternsByStatus(String status) {
@@ -81,7 +91,7 @@ public class InternService {
     }
 
     public List<Intern> getInternsByBatchIdAndStatus(Long batchId, String status) {
-        return internRepository.findByBatchIdAndStatus(batchId, status);
+        return internRepository.findByBatch_IdAndStatus(batchId, status);
     }
 
     public Optional<Intern> getInternByEmail(String email) {

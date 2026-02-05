@@ -20,8 +20,12 @@ public class InternController {
 
     @PostMapping
     public ResponseEntity<Intern> createIntern(@RequestBody Intern intern) {
-        Intern createdIntern = internService.createIntern(intern);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdIntern);
+        try {
+            Intern createdIntern = internService.createIntern(intern);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdIntern);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}")

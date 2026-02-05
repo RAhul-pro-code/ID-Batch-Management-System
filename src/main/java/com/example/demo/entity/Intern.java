@@ -63,6 +63,9 @@ public class Intern {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
+    @Transient
+    private Long batchId;
+
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 

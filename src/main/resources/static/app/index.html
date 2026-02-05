@@ -2,6 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IDMS — Demo UI</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>IDMS — Batch & Intern Management</h1>
+    <nav>
+      <button id="tab-batches" class="active">Batches</button>
+      <button id="tab-interns">Interns</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="batches-section">
+      <h2>Create Batch</h2>
+      <form id="batch-form">
+        <input name="batchName" placeholder="Batch name" required />
+        <input name="technology" placeholder="Technology" required />
+        <input name="startDate" type="date" required />
+        <input name="endDate" type="date" required />
+        <input name="capacity" type="number" placeholder="Capacity" required />
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="submit">Save Batch</button>
+      </form>
+
+      <h2>Existing Batches</h2>
+      <table id="batches-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Tech</th><th>Capacity</th><th>Enrolled</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="interns-section" class="hidden">
+      <h2>Create Intern</h2>
+      <form id="intern-form">
+        <div class="form-grid">
+          <input name="firstName" placeholder="First name" required />
+          <input name="lastName" placeholder="Last name" required />
+          <input name="email" type="email" placeholder="Email" required />
+          <input name="phoneNumber" placeholder="Phone" required />
+          <input name="college" placeholder="College" required />
+          <input name="degree" placeholder="Degree" required />
+          <input name="specialization" placeholder="Specialization" required />
+          <input name="dateOfBirth" type="date" placeholder="Date of birth" required />
+          <input name="enrollmentDate" type="date" required />
+          <input name="address" placeholder="Address" required />
+          <select name="batchId" id="batch-select" required>
+            <option value="">-- select batch --</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit" id="intern-save">Save Intern</button>
+          <button type="button" id="intern-cancel" class="secondary hidden">Cancel</button>
+        </div>
+      </form>
+
+      <h2>Interns</h2>
+      <table id="interns-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Batch</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <div id="message" class="message"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IDMS - Demo UI</title>
   <link rel="stylesheet" href="styles.css">
