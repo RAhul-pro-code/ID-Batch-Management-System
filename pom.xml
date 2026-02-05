@@ -46,7 +46,7 @@
 		</dependency>
 		<!-- MySQL driver for production/development with MySQL -->
 		<dependency>
-			<groupId>mysql</groupId>
+			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<version>8.1.0</version>
 			<scope>runtime</scope>
@@ -101,6 +101,7 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
+							<installDirectory>${project.basedir}/frontend</installDirectory>
 							<nodeVersion>v18.20.0</nodeVersion>
 							<npmVersion>9.8.0</npmVersion>
 						</configuration>
